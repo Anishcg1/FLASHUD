@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+    font-family: 'kindred';
+    src: url('/fonts/TANKINDRED-Display.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@layer base {
+    html {
+        scroll-behavior: initial;
+    }
+    body {
+        @apply bg-white text-brand-dark antialiased selection:bg-brand-orange selection:text-white;
+        margin: 0;
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+}
+
+/* Custom Scrollbar for Premium Feel */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.6);
+}
