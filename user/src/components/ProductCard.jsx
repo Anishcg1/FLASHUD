@@ -6,7 +6,7 @@ import { useLocalOrRemoteUrl } from '../lib/mediaResolver';
 // source.unsplash.com URLs serve random images on each request unless
 // given a fixed seed. We use the product id so it's always the same image.
 const stableImageUrl = (url, seed) => {
-    if (!url) return url;
+    if (!url || typeof url !== 'string') return url;
     // source.unsplash.com/... — add a sig param to pin the image
     if (url.includes('source.unsplash.com')) {
         const separator = url.includes('?') ? '&' : '?';

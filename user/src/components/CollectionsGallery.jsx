@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 
-// Pin source.unsplash.com URLs to a fixed seed so they don't change on refresh
 const stableImageUrl = (url, seed) => {
-    if (!url) return url;
+    if (!url || typeof url !== 'string') return url;
     if (url.includes('source.unsplash.com')) {
         const separator = url.includes('?') ? '&' : '?';
         return `${url}${separator}sig=${encodeURIComponent(seed)}`;

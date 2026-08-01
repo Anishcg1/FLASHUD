@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider, useAuth } from './lib/AuthContext';
+import ErrorBoundary from './components/ErrorBoundary';
 import ScrollToTop from './components/ScrollToTop';
 import Header from './components/Header';
 import Footer from './components/Footer';
@@ -35,6 +36,7 @@ const UserProtectedRoute = ({ children }) => {
 
 function App() {
     return (
+        <ErrorBoundary>
         <AuthProvider>
             <Router>
                 <ScrollToTop />
@@ -74,6 +76,7 @@ function App() {
                 </div>
             </Router>
         </AuthProvider>
+        </ErrorBoundary>
     )
 }
 

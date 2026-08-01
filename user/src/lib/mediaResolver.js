@@ -2,14 +2,14 @@ import { useState, useEffect } from 'react';
 
 // Detect if a URL points to a video file
 export const isVideo = (url) => {
-    if (!url) return false;
+    if (!url || typeof url !== 'string') return false;
     const lower = url.toLowerCase().split('?')[0];
     return lower.endsWith('.mp4') || lower.endsWith('.webm') || lower.endsWith('.ogg') || lower.endsWith('.mov');
 };
 
 // Extract filename from URL
 export const getFilename = (url) => {
-    if (!url) return '';
+    if (!url || typeof url !== 'string') return '';
     try {
         const decodedUrl = decodeURIComponent(url);
         const parts = decodedUrl.split('/');
@@ -23,6 +23,7 @@ export const getFilename = (url) => {
 // We MUST verify Content-Type because Vite's SPA fallback returns HTTP 200
 // with text/html for any unknown path — response.ok alone is not enough.
 const checkLocalFileExists = async (path) => {
+    if (!path || typeof path !== 'string') return false;
     try {
         const response = await fetch(path, { method: 'HEAD' });
         if (!response.ok) return false;
@@ -45,7 +46,7 @@ export const useLocalOrRemoteUrl = (url) => {
         // this prevents a blank flash while the async HEAD check is pending.
         setResolvedUrl(url || null);
 
-        if (!url) return;
+        if (!url || typeof url !== 'string') return;
 
         // Already a local/blob/data path — no need to check
         if (url.startsWith('/') || url.startsWith('blob:') || url.startsWith('data:')) {

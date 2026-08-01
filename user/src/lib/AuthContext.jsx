@@ -15,24 +15,17 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Get initial session
-        supabase.auth.getSession().then(({ data: { session } }) => {
-            setSession(session);
-            setUser(session?.user ?? null);
-            setLoading(false);
-            if (session?.user) {
-                fetchAndSyncLocal(session.user.id);
-            }
-        });
-
-        // Listen for auth changes
+        // onAuthStateChange fires INITIAL_SESSION on mount with the restored session.
+        // This is the single source of truth — no separate getSession() needed.
+        // Having both causes a race condition on refresh that can double-fire state updates.
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, newSession) => {
             setSession(newSession);
             setUser(newSession?.user ?? null);
             setLoading(false);
 
-            if (event === 'SIGNED_IN' && newSession?.user) {
-                await fetchAndSyncLocal(newSession.user.id);
+            // Sync cart/wishlist from DB to localStorage on initial load OR sign in
+            if ((event === 'SIGNED_IN' || event === 'INITIAL_SESSION') && newSession?.user) {
+                fetchAndSyncLocal(newSession.user.id);
             } else if (event === 'SIGNED_OUT') {
                 localStorage.removeItem('cart');
                 localStorage.removeItem('wishlist');
