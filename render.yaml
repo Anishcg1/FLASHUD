@@ -2,7 +2,8 @@ services:
   # ─────────────────────────────────────────────
   # User Storefront  →  e.g. https://flashud.onrender.com
   # ─────────────────────────────────────────────
-  - type: static
+  - type: web
+    runtime: static
     name: flashud-user
     rootDir: user
     buildCommand: npm install && npm run build
@@ -24,7 +25,8 @@ services:
   # ─────────────────────────────────────────────
   # Admin Panel  →  e.g. https://flashud-admin.onrender.com
   # ─────────────────────────────────────────────
-  - type: static
+  - type: web
+    runtime: static
     name: flashud-admin
     rootDir: admin
     buildCommand: npm install && npm run build
