@@ -74,6 +74,7 @@ export default function Cart() {
                 .match({ user_id: user.id, product_id: newCart[index].id, size: newCart[index].size });
         }
         window.dispatchEvent(new Event('storage'));
+        window.dispatchEvent(new Event('cartUpdated'));
     };
 
     const removeItem = async (index) => {
@@ -92,6 +93,7 @@ export default function Cart() {
                 .match({ user_id: user.id, product_id: item.id, size: item.size });
         }
         window.dispatchEvent(new Event('storage'));
+        window.dispatchEvent(new Event('cartUpdated'));
     };
 
     // Items included in the order summary (checked ones only)

@@ -1,0 +1,44 @@
+services:
+  # ─────────────────────────────────────────────
+  # User Storefront  →  e.g. https://flashud.onrender.com
+  # ─────────────────────────────────────────────
+  - type: static
+    name: flashud-user
+    rootDir: user
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: false
+    routes:
+      # SPA fallback — all unknown paths serve index.html
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_SUPABASE_URL
+        sync: false          # you'll paste the value in Render dashboard
+      - key: VITE_SUPABASE_ANON_KEY
+        sync: false
+      - key: VITE_USE_MOCK_SUPABASE
+        value: "false"
+
+  # ─────────────────────────────────────────────
+  # Admin Panel  →  e.g. https://flashud-admin.onrender.com
+  # ─────────────────────────────────────────────
+  - type: static
+    name: flashud-admin
+    rootDir: admin
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    pullRequestPreviewsEnabled: false
+    routes:
+      # SPA fallback — all unknown paths serve index.html
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_SUPABASE_URL
+        sync: false
+      - key: VITE_SUPABASE_ANON_KEY
+        sync: false
+      - key: VITE_USE_MOCK_SUPABASE
+        value: "false"

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext';
+import { supabase } from '../lib/supabaseClient';
 
 const CartDrawer = ({ isOpen, onClose }) => {
     const navigate = useNavigate();
@@ -34,17 +35,29 @@ const CartDrawer = ({ isOpen, onClose }) => {
 
     const subtotal = cartItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
 
-    const removeItem = (index) => {
+    const removeItem = async (index) => {
+        const item = cartItems[index];
         const newCart = cartItems.filter((_, i) => i !== index);
         localStorage.setItem('cart', JSON.stringify(newCart));
         setCartItems(newCart);
+        if (user) {
+            try {
+                await supabase
+                    .from('cart_items')
+                    .delete()
+                    .match({ user_id: user.id, product_id: item.id, size: item.size });
+            } catch (err) {
+                console.error("Error removing item from remote cart:", err);
+            }
+        }
         window.dispatchEvent(new Event('storage'));
+        window.dispatchEvent(new Event('cartUpdated'));
     };
 
     if (!isOpen) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex justify-end">
+        <div className="fixed inset-0 z-[70] flex justify-end">
             {/* Backdrop */}
             <div
                 className="absolute inset-0 bg-black/20 backdrop-blur-sm transition-opacity"
